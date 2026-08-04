@@ -7,3 +7,4 @@ My own notes and examples from the course.
 ## Contents
 
 1. [Naming](./nameing//naming.md)
+2. [Comments & Formatting](./comments-formatting/comments-formatting.md)
