@@ -1,6 +1,6 @@
 # Functions & Methods
 
-Functions and methods (I don't differentiate here) are the meat of any code we write. All our code is part of some function or method after all. And we use functions to call other functions, build re-usable functionalities and more.
+Functions and methods are the meat of any code we write. All our code is part of some function or method after all. And we use functions to call other functions, build re-usable functionalities and more.
 
 That's why it's extremely important to write clean functions.
 
@@ -8,8 +8,6 @@ Functions are made up of three main parts:
 1. Their name
 2. Their parameters (if any)
 3. Their body
-
-The naming of functions and methods is covered in the "Naming" section already. This section focuses on the parameters and body therefore.
 
 ---
 
@@ -33,14 +31,14 @@ Reading this code is no fun either - for example, it's not immediately clear why
 
 Generally, fewer is better.
 
-Functions without parameters are of course very easy to read and digest. For example:
+Functions without parameters are of course very easy to read and understand. For example:
 
 ```javascript
 createSession();
 user.save();
 ```
 
-But "no parameters" is not always an option - after all it is the capability to take parameters that makes functions dynamic and flexible.
+But "no parameters" isn't always an option — after all, it's the ability to take parameters that makes functions dynamic and flexible.
 
 Thankfully, functions with one parameter are also straightforward:
 
@@ -58,7 +56,7 @@ login('test@test.com', 'testers');
 createProduct('Carpet', 12.99);
 ```
 
-On the other hand, you can encounter functions where two parameters can already be confusing and it's not obvious / common sense which value should go where:
+On the other hand, you can encounter functions where two parameters can already be confusing and it's not obvious / and it's not clear which value should go in which spot.:
 
 ```javascript
 createSession('abc', 'temp');
@@ -132,7 +130,7 @@ function login(email, password) {
 }
 ```
 
-This is way shorter and way easier to digest, right?
+This is way shorter and way easier to understand, right?
 
 And that's the goal! Having short, focused functions which are easy to read, to understand and to maintain!
 
@@ -236,9 +234,9 @@ And our function does exactly that!
 
 All three operations are on the same level of abstraction (pretty high levels in this case) and one level below the function name.
 
-Of course, the line is blurry though.
+Of course, it's not always that clear, though.
 
-What about this slightly altered example?
+What about this example with a small change?
 
 ```javascript
 function login(email, password) {
@@ -252,13 +250,13 @@ function login(email, password) {
 }
 ```
 
-Here, we still got relatively high levels of abstraction but we can definitely argue whether all operations are on the same level. `verifyCredentials(...)` seems to be more high-level than doing the `if` check and caring about the error message manually.
+Here, we're still at a pretty high level of abstraction, but you could argue that not all operations are on the same level. `verifyCredentials(...)` is more high-level than writing the `if` check and handling the error message yourself.
 
-In addition, whilst validation belongs to the tasks kicked off by `login()`, we can question whether `showError(...)` should be called directly inside of `login()`. It seems to be more than one level below the `login()` instruction.
+Also, validation is part of `login()`'s job, but we can ask whether `showError(...)` should really be called directly inside `login()`. It feels more than one level below `login()`.
 
 Obviously, this always leaves room for discussion and interpretation.
 
-And more granularity also isn't always better (see further down below, "Split Functions Reasonably").
+And more detail isn't always better either (see "Split Functions Reasonably" below).
 
 ---
 
@@ -300,18 +298,18 @@ function printDocument(documentPath) {
 }
 ```
 
-But this new `printFile()` function almost just rephrases the `printDocument` function. So this split could be done but it might not always be a great decision to make it (see below, "Split Functions Reasonably").
+But this new `printFile()` function almost just repeats printDocument. So you could split it, but that might not always be a good idea (see "Split Functions Reasonably" below).
 
 ---
 
 ### Rules Of Thumb
 
-The concept of "levels of abstraction" can be scary and you absolutely should NOT spend hours on your code, just to analyze which levels you might have there.
+The concept of "levels of abstraction" can be scary and you absolutely should NOT spend hours on your code just to look for different levels.
 
 Instead, there are two easy rules of thumb I came up with, which help you decide when to split:
 
-1. Extract code that works on the same functionality / is closely related
-2. Extract code that requires more interpretation than the surrounding code
+1. Group together code that does related things.
+2. Extract code that's harder to understand than the rest.
 
 Here's an example for rule #1:
 
@@ -359,7 +357,7 @@ function processTransaction(transaction) {
 }
 ```
 
-The validation for whether the transaction type is 'UNKNOWN' is of course not difficult to read but it definitely needs more interpretation from your side than just reading `processPayment(...)`.
+The validation for whether the transaction type is 'UNKNOWN' is of course not difficult to read but it requires more effort to understand than just reading `processPayment(...)`.
 
 Hence, you could refactor this to:
 
@@ -375,7 +373,7 @@ function processTransaction(transaction) {
 
 This is now all very readable and no step requires extra interpretation from the reader's side.
 
-Again, "behind the scenes", we got rid of mixed levels of abstraction and a too big distance between the level implied by the function name and some code in that function.
+Again, behind the scenes, we removed mixed abstraction levels and the big gap between what the function name suggests and what some of its code actually does.
 
 ---
 
@@ -443,19 +441,19 @@ function saveUser(email, password) {
 
 Which version is easier to understand?
 
-I would argue, the second version is. Even though (or actually: because) we have less function extractions there.
+I would argue the second version is — and that's because we have fewer function extractions there.
 
-Splitting functions and keeping them short is important! But pointless extractions lead nowhere - you shouldn't extract just for the extraction's sake.
+Splitting functions and keeping them short is important! But pointless extractions lead no where - you shouldn't extract code without a good reason.
 
 How do you know that an extraction doesn't make sense?
 
-There are three main signals:
+**There are three main signals:**
 
-1. You're just renaming the operation
-2. You suddenly need to scroll way more, just to follow the line of thought of a simple function
-3. You can't come up with a reasonable name for the extracted function, which hasn't already been taken
+1. You're just giving the code a new name — not really changing anything.
+2. You have to scroll way more now just to understand a simple function.
+3. You can't think of a good name for it that isn't already used.
 
-In the example above, both the `throwError()` and the `buildUser()` functions in the end just renamed the operation they contained. For `buildUser()`, coming up with a good name was hard because `createUser()` was already taken - and does more than just create a single user object.
+In the example above, both `throwError()` and `buildUser()` in the end just wrapped the code without adding value. For `buildUser()`, coming up with a good name was hard because `createUser()` was already taken - and does more than just create a single user object.
 
 ---
 
@@ -473,15 +471,15 @@ A side effect is simply an operation which changes the state (data, system statu
 
 Connecting to a database is a side effect. Sending an HTTP request is one. Printing output to the console or changing data saved in memory - all these things are side effects.
 
-Side effects are a normal thing in development - after all, we DO build applications in order to derive results and change things.
+Side effects are a normal thing in development - after all, we build applications in order to derive results and change things.
 
-Problems arise when a side effect is unexpected.
+Problems happen when a side effect is unexpected.
 
 ---
 
 ### Unexpected Side Effects
 
-A side effect is unexpected, when the name and/or context of a function doesn't imply it.
+A side effect is unexpected when the name and/or context of a function doesn't make it obvious.
 
 Consider this example:
 
@@ -501,16 +499,16 @@ Creating a session (which has an impact on data in memory, maybe even on data in
 
 We might expect this kind of side-effect in a function named `login()`, but in `validateUserInput()`, it's definitely not expected. And that's a problem.
 
-Hence you should move this side-effect into another function, or - if it makes sense - rename the function to imply that this side-effect will be caused.
+Hence you should move this side-effect into another function, or — if it makes sense — rename the function to show that this side-effect will happen.
 
 ---
 
 ## Summary Checklist
 
 - ✅ Limit the number of parameters your functions use - less is better!
-- ✅ Consider using objects, dictionaries or arrays to group multiple parameters into one parameter
+- ✅ Consider using objects, key-value stores, or arrays to group multiple parameters into one parameter
 - ✅ Functions should be small and do one thing
-- ✅ Levels of abstraction inside the function body should be one level below the level implied by the function name
+- ✅ What the function does should match its name — and the code inside should be slightly more detailed, not wildly more complex
 - ✅ Avoid mixing levels of abstractions in functions
 - ✅ But: Avoid redundant splitting!
 - ✅ Stay DRY (Don't Repeat Yourself)
