@@ -10,3 +10,4 @@ My own notes and examples from the course.
 2. [Comments & Formatting](./comments-formatting/comments-formatting.md)
 3. [Functions & Methods](./functions-and-methods/functions-and-methods.md)
 4. [Control Structures & Errors](./control-structures-and-errors/control-structures-and-errors.md)
+5. [Classes, Objects & Data Containers](./classes-objects-and-data-containers/classes-objects-and-data-containers.md)
