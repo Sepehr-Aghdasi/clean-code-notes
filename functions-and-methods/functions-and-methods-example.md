@@ -51,7 +51,8 @@ interface OrderRequest {
 }
 
 function createOrder(orderRequest: OrderRequest): Order {
-  validateQuantity(orderRequest.quantity);
+  const { quantity } = orderRequest;
+  validateQuantity(quantity);
 
   const total = calculateTotal(orderRequest);
   const order = buildOrder(orderRequest, total);
@@ -66,10 +67,10 @@ function validateQuantity(quantity: number) {
   }
 }
 
-function calculateTotal(orderRequest: OrderRequest): number {
-  const product = database.find('products', orderRequest.productId);
-  const price = product.price * orderRequest.quantity;
-  const discount = orderRequest.discountCode ? price * 0.1 : 0;
+function calculateTotal({ productId, quantity, discountCode }: OrderRequest): number {
+  const product = database.find('products', productId);
+  const price = product.price * quantity;
+  const discount = discountCode ? price * 0.1 : 0;
   return price - discount;
 }
 

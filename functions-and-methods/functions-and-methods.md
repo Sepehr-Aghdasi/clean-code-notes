@@ -84,7 +84,35 @@ You can replace multiple parameters with a map or an array!
 createRectangle({ x: 10, y: 9, width: 30, height: 12 });
 ```
 
-This is much more readable!
+This is much more readable! And it's not just about readability:
+
+- Named fields (`x`, `y`, `width`, `height`) are self-documenting at the call site — you don't need to remember argument order.
+- The object can gain new optional fields later without breaking every existing call site, which isn't true for positional parameters.
+- Callers can pass the fields in any order.
+
+This rule isn't limited to functions — it applies just as much to class constructors, which tend to accumulate parameters over time as a class grows:
+
+```javascript
+// Before: positional constructor parameters
+class User {
+  constructor(name, email, password, role, hobbies) { ... }
+}
+
+new User('Max', 'max@test.com', 'testers', 'admin', ['Sports', 'Cooking']);
+
+// After: a single config object
+class User {
+  constructor({ name, email, password, role, hobbies }) { ... }
+}
+
+new User({
+  name: 'Max',
+  email: 'max@test.com',
+  password: 'testers',
+  role: 'admin',
+  hobbies: ['Sports', 'Cooking'],
+});
+```
 
 ---
 
@@ -506,7 +534,7 @@ Hence you should move this side-effect into another function, or — if it makes
 ## Summary Checklist
 
 - ✅ Limit the number of parameters your functions use - less is better!
-- ✅ Consider using objects, key-value stores, or arrays to group multiple parameters into one parameter
+- ✅ Consider using objects, key-value stores, or arrays to group multiple parameters into one parameter — this applies to class constructors too
 - ✅ Functions should be small and do one thing
 - ✅ What the function does should match its name — and the code inside should be slightly more detailed, not wildly more complex
 - ✅ Avoid mixing levels of abstractions in functions
