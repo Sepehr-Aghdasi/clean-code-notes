@@ -65,10 +65,15 @@ class User {
   }
 }
 
-function registerUser(credentials: { email: string; password: string }): boolean {
-  const isValidInput = isEmail(credentials.email) && hasValidPasswordLength(credentials.password);
+interface Credentials {
+  email: string;
+  password: string;
+}
 
-  if (!isValidInput) {
+function registerUser(credentials: Credentials): boolean {
+  const hasValidCredentials = isEmail(credentials.email) && hasValidPasswordLength(credentials.password);
+
+  if (!hasValidCredentials) {
     return false;
   }
 
@@ -97,6 +102,7 @@ function fetchProducts() {
 **What changed:**
 - `e` / `p` → `email` / `password` — nouns that describe the data they hold
 - `proc(d)` → `registerUser(credentials)` — a verb that says exactly what the function does, with a descriptive parameter
-- `chk` → `isValidInput` — a boolean phrased as a yes/no question
+- `chk` → `hasValidCredentials` — a boolean phrased as a yes/no question, and specific about what it's validating
+- `{ email: string; password: string }` → named `Credentials` interface — the parameter's type is as descriptive as its name
 - `usr` → `user` — no reason to abbreviate
 - `getProducts()` → `fetchProducts()` — consistent with `fetchUsers()`
