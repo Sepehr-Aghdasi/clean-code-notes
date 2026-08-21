@@ -47,6 +47,11 @@ function notifyLastPurchase(user: User) {
 ## ✅ After
 
 ```typescript
+interface Purchase {
+  date: Date;
+  amount: number;
+}
+
 class User {
   public name: string;
   public email: string;
