@@ -30,7 +30,7 @@ function processRefund(order: any) {
 }
 ```
 
-Four levels of nesting force the reader to hold every outer condition in their head just to understand the innermost line. The negative `!order.isCancelled` check adds friction, and failures are reported as `{ code, message }` objects instead of real errors — so every caller has to remember to check `.code` instead of using `try/catch`.
+The four nested `if` statements are hard to follow, the `!order.isCancelled` check is harder to read than a positive check, and failures return a `{ code, message }` object instead of throwing a real error — so callers must remember to check `.code` instead of just using `try/catch`.
 
 ---
 
@@ -52,7 +52,13 @@ function getRefundHandler(paymentMethod: string): (order: Order) => void {
     paypal: refundPayPal,
   };
 
-  return handlers[paymentMethod];
+  const handler = handlers[paymentMethod];
+
+  if (!handler) {
+    throw new Error(`Unsupported payment method: ${paymentMethod}!`);
+  }
+
+  return handler;
 }
 
 function refundCreditCard(order: Order) {
@@ -73,6 +79,7 @@ function refundPayPal(order: Order) {
 ```
 
 **What changed:**
-- Four nested `if` statements → one guard clause at the top that fails fast on any invalid state
-- The `paymentMethod === 'creditCard' / 'paypal'` branching (which would only grow with more payment methods) was replaced with a factory (`getRefundHandler`) so each payment method's logic lives in its own function
-- `{ code, message }` return values → real thrown `Error`s, so callers can use standard `try/catch` instead of checking a `code` field
+- Nested `if` statements → one guard clause that checks everything up front and exits early
+- `paymentMethod === 'creditCard' / 'paypal'` branching → a factory (`getRefundHandler`) that maps each payment method to its own function
+- `{ code, message }` return values → real thrown `Error`s, so callers can use `try/catch`
+- Unknown payment methods now throw a clear error instead of crashing later with a confusing one
